@@ -8,6 +8,13 @@ A collection of Claude Code skills by byronxlg.
 claude plugin add byronxlg/skills
 ```
 
+Or via the [agent-skills-cli](https://www.npmjs.com/package/agent-skills-cli):
+
+```bash
+npm install -g agent-skills-cli
+skills install byronxlg/skills
+```
+
 ## Skills
 
 ### Agent Team
