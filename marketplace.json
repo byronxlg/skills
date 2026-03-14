@@ -1,0 +1,27 @@
+{
+  "name": "byronxlg-skills",
+  "owner": {
+    "name": "byronxlg"
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "description": "A collection of Claude Code skills by byronxlg"
+  },
+  "plugins": [
+    {
+      "name": "agent-team",
+      "source": ".",
+      "description": "A framework for creating and managing teams of Claude Code agents that work on projects independently, with defined roles, workflows, and coordination rules.",
+      "license": "MIT",
+      "strict": false,
+      "keywords": ["agent-team", "roles", "workflow", "coordination"],
+      "skills": [
+        "./skills/agent-team-setup",
+        "./skills/director",
+        "./skills/lead",
+        "./skills/builder",
+        "./skills/reviewer"
+      ]
+    }
+  ]
+}
