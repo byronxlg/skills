@@ -21,23 +21,25 @@ phases are complete, a single generation step creates all the Claude specs.
 Templates for each phase are in `templates/`. Completed examples are in `examples/`.
 Design principles are in `principles.md`.
 
-When walking the user through each phase, reference the examples to show what a
-filled-out file looks like.
+IMPORTANT: Only read files when you need them for the current phase. Do not read
+templates, examples, or principles upfront. Read lazily:
+- Phase 1: read `templates/PROJECT.md` and `examples/PROJECT.md`
+- Phase 2: read `templates/TEAM.md` and `examples/TEAM.md`, and `principles.md`
+- Phase 3: read `templates/CONVENTIONS.md` and `examples/CONVENTIONS.md`
+- Phase 4: read `examples/generated/` files as reference for output format
 
 ### Phase 1: Project (what are we building?)
 
-Walk the user through filling out a PROJECT.md file using the template in
-`templates/PROJECT.md`.
-
-Keep it minimal. Offer a draft for the user to react to.
+Read `templates/PROJECT.md` and `examples/PROJECT.md`, then walk the user through
+filling out their PROJECT.md. Keep it minimal. Offer a draft for the user to react to.
 
 Output: `PROJECT.md`
 
 ### Phase 2: Team (who does what?)
 
-Walk the user through filling out a TEAM.md file using the template in
-`templates/TEAM.md`. Work through each section in order, offering a first draft
-for the user to react to rather than asking open-ended questions.
+Read `templates/TEAM.md`, `examples/TEAM.md`, and `principles.md`, then walk the user
+through filling out their TEAM.md. Work through each section in order, offering a first
+draft for the user to react to rather than asking open-ended questions.
 
 The sections, in order:
 
@@ -50,8 +52,8 @@ Output: `TEAM.md`
 
 ### Phase 3: Conventions (how do we work?)
 
-Walk the user through filling out a CONVENTIONS.md file using the template in
-`templates/CONVENTIONS.md`. Skip sections the user says don't apply. Provide sensible
+Read `templates/CONVENTIONS.md` and `examples/CONVENTIONS.md`, then walk the user
+through filling it out. Skip sections the user says don't apply. Provide sensible
 defaults for universal items, leave genuinely project-specific items for the user to
 fill in.
 
@@ -59,6 +61,7 @@ Output: `CONVENTIONS.md`
 
 ### Phase 4: Generate (create all the specs)
 
+Read the files in `examples/generated/` as reference for output format and style.
 Once the definition files are complete, generate all Claude specs in one step:
 
 1. **CLAUDE.md** from PROJECT.md + TEAM.md + CONVENTIONS.md:
