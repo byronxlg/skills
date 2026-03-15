@@ -1,6 +1,6 @@
 ---
 name: agent-team-setup
-description: Guides users through setting up an agent team from scratch - project definition, team design, conventions - then generates all .claude specs. Use when the user wants to create a new agent team project.
+description: Guides users through setting up an agent team from scratch - project definition, team design - then generates all .claude specs. Use when the user wants to create a new agent team project.
 ---
 
 # Agent Team Setup
@@ -15,80 +15,74 @@ specs from existing definition files.
 
 ## How it works
 
-Four phases, worked through in order. Each phase produces a definition file. Once all
-phases are complete, a single generation step creates all the Claude specs.
+Four phases, worked through in order. The first two phases produce definition files.
+The third phase generates all Claude specs from them. The fourth phase sets up the
+platform.
 
-Templates for each phase are in `templates/`. Completed examples are in `examples/`.
-Design principles are in `principles.md`.
-
-IMPORTANT: Only read files when you need them for the current phase. Do not read
-templates, examples, or principles upfront. Read lazily:
-- Phase 1: read `templates/PROJECT.md` and `examples/PROJECT.md`
-- Phase 2: read `templates/TEAM.md` and `examples/TEAM.md`, and `principles.md`
-- Phase 3: read `templates/CONVENTIONS.md` and `examples/CONVENTIONS.md`
-- Phase 4: read `examples/generated/` files as reference for output format
+Templates for phases 1 and 2 are in `templates/`.
 
 ### Phase 1: Project (what are we building?)
 
-Read `templates/PROJECT.md` and `examples/PROJECT.md`, then walk the user through
-filling out their PROJECT.md. Keep it minimal. Offer a draft for the user to react to.
+Walk the user through filling out a PROJECT.md file using the template in
+`templates/PROJECT.md`.
 
-Output: `PROJECT.md`
+Two sections:
+1. **Identity** - name, repo, description, tech stack
+2. **Platform** - map abstract team concepts (issues, code reviews, discussion channels, etc.) to concrete tools
+
+Keep it minimal. Offer a draft for the user to react to.
+
+Output: `.claude/agent-team-setup-specs/PROJECT.md`
 
 ### Phase 2: Team (who does what?)
 
-Read `templates/TEAM.md`, `examples/TEAM.md`, and `principles.md`, then walk the user
-through filling out their TEAM.md. Work through each section in order, offering a first
-draft for the user to react to rather than asking open-ended questions.
+Walk the user through filling out a TEAM.md file using the template in
+`templates/TEAM.md`. Work through each section in order, offering a first draft
+for the user to react to rather than asking open-ended questions.
 
 The sections, in order:
 
-1. **Roles** - define before workflow, since workflow states map to role owners
-2. **Workflow** - the states work moves through, each owned by a role
-3. **Handoffs** - contracts between roles defining what the artifact looks like when passed
-4. **Rules** - team-wide rules first, then per-role rules
+1. **Roles** - for each role, define:
+   - Purpose (one line - why it exists)
+   - Before you start (context to gather before doing any work)
+   - Priorities (ordered priority stack - work the highest applicable first)
+   - Outputs (what this role produces)
+   - Boundaries (what this role must never do)
+2. **Workflow** - states with Set by (who moves work into this state) and Worked by (who does work in this state)
+3. **Handoffs** - transition table (from -> to, triggered by, artifact, preconditions) plus communication channels (channel, post type, posted by, thread, purpose)
 
-Output: `TEAM.md`
+Output: `.claude/agent-team-setup-specs/TEAM.md`
 
-### Phase 3: Conventions (how do we work?)
+### Phase 3: Generate (create all the specs)
 
-Read `templates/CONVENTIONS.md` and `examples/CONVENTIONS.md`, then walk the user
-through filling it out. Skip sections the user says don't apply. Provide sensible
-defaults for universal items, leave genuinely project-specific items for the user to
-fill in.
+Once the definition files are complete, generate all Claude specs in one step.
+Read `.claude/agent-team-setup-specs/PROJECT.md` and `.claude/agent-team-setup-specs/TEAM.md`
+as inputs. Use the platform mapping from PROJECT.md to translate abstract concepts into
+concrete tool references in all generated files.
 
-Output: `CONVENTIONS.md`
-
-### Phase 4: Generate (create all the specs)
-
-Read the files in `examples/generated/` as reference for output format and style.
-Once the definition files are complete, generate all Claude specs in one step:
-
-1. **CLAUDE.md** from PROJECT.md + TEAM.md + CONVENTIONS.md:
+1. **CLAUDE.md** from PROJECT.md + TEAM.md:
    - Project name and description
    - Tech stack
-   - Team roles summary (role name + what it owns, one line each)
+   - Team roles summary (role name + purpose, one line each)
    - Workflow state table
    - List of available skills
-   - Note that conventions are in `.claude/rules/` files
 
-2. **`.claude/rules/team.md`** from TEAM.md:
-   - Team-wide rules
+2. **`.claude/skills/{role}-ats/SKILL.md`** for each role in TEAM.md:
+   - The role's purpose, before you start, priorities, outputs, and boundaries
+   - The handoff transitions where this role is sender or receiver
+   - The communication channels where this role posts or replies
+   - Platform-specific commands and tools mapped from PROJECT.md (e.g., abstract "open a code review" becomes the concrete platform command)
+   - The workflow states this role sets or works, as step-by-step instructions
 
-3. **`.claude/rules/*.md`** from CONVENTIONS.md:
-   - Group related conventions into rule files by domain
-   - Git -> `.claude/rules/git.md`
-   - Code, Dependencies -> `.claude/rules/code.md`
-   - Testing -> `.claude/rules/testing.md`
-   - Infrastructure, Security -> `.claude/rules/infrastructure.md`
-   - Documentation -> `.claude/rules/documentation.md`
-   - Collapse small sections into related files
+All spec files live in `.claude/agent-team-setup-specs/` as source of truth. If something needs to
+change, update the spec file and regenerate.
 
-4. **`.claude/skills/{role}/SKILL.md`** for each role in TEAM.md:
-   - The role's responsibilities and boundaries
-   - The handoff contracts where this role is sender or receiver
-   - The per-role rules
-   - The workflow states this role owns, as step-by-step instructions
+### Phase 4: Platform setup
 
-Keep the definition files (PROJECT.md, TEAM.md, CONVENTIONS.md) in the repo as source
-of truth. If something needs to change, update the definition file and regenerate.
+Using the platform mapping from PROJECT.md and the workflow/channels from TEAM.md,
+set up the platform:
+
+- Create the project board with a column per workflow state
+- Create discussion channels/categories matching the communication channels table
+- Configure any other platform resources (labels, branch protection, etc.)
+- Use platform-specific commands mapped from PROJECT.md
