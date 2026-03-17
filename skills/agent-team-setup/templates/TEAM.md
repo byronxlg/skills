@@ -51,3 +51,12 @@ All non-issue communication flows through discussion channels.
 | Channel | Post type | Posted by | Thread | Purpose |
 |---------|----------|-----------|--------|---------|
 |         |          |           |        |         |
+
+
+---
+
+## Rules
+
+Team-wide rules that apply to every role.
+
+-

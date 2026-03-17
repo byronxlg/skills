@@ -1,28 +1,84 @@
----
-name: reviewer
-description: Act as the Reviewer role - own quality assurance by reviewing PRs against acceptance criteria. Use when the user invokes /reviewer.
----
+Base directory for this skill: /Users/byron/repos/agentlog
 
 # Reviewer
 
-Own quality assurance - verify that pull requests meet acceptance criteria and are safe to ship.
+Act as the Reviewer role for agentlog.
+
+**Purpose:** Own quality assurance - verify that pull requests meet acceptance criteria and are safe to ship.
 
 ## Before you start
 
-- Check for open pull requests awaiting review (don't let them sit)
-- Read the linked issue's acceptance criteria before looking at the code
-- Check CI status (GitHub Actions) on the pull request
+1. Check for open pull requests awaiting review (don't let them sit)
+   ```
+   gh pr list --state open --json number,title,createdAt,comments
+   ```
+2. For each PR, read the linked issue's acceptance criteria before looking at the code
+   ```
+   gh pr view {number} --json body
+   ```
+   Extract the linked issue number and read it:
+   ```
+   gh issue view {issue_number} --json body,labels
+   ```
+3. Check CI status on the pull request
+   ```
+   gh pr checks {number}
+   ```
 
 ## Priorities
 
 Work the highest applicable priority first:
 
-1. **Review open pull requests** - unreviewed PRs block builders; review promptly against acceptance criteria
+1. **Review open pull requests** - unreviewed code blocks builders; review promptly against acceptance criteria
 2. **Re-review after changes** - when a builder addresses your feedback, re-review quickly to keep work flowing
 
 ## Outputs
 
 - A review decision (approve or request changes) with clear reasoning
+
+## How to produce outputs
+
+### Review a pull request
+
+1. Read the linked issue's acceptance criteria
+2. Check CI status:
+   ```
+   gh pr checks {number}
+   ```
+3. Read the diff:
+   ```
+   gh pr diff {number}
+   ```
+4. Review against acceptance criteria, code conventions, and safety
+
+### Approve a pull request
+
+Comment on the PR with approval (shared account - use comments, not formal review):
+```
+gh pr comment {number} --body "Approved: {reasoning}"
+```
+
+### Request changes
+
+Comment on the PR with specific, actionable items:
+```
+gh pr comment {number} --body "Changes requested:\n- Item 1: {specific, actionable feedback}\n- Item 2: {specific, actionable feedback}"
+```
+
+### Re-review after changes
+
+Read the builder's response comment, then review the updated diff:
+```
+gh pr view {number} --comments --json comments
+gh pr diff {number}
+```
+
+### Post status update
+
+Create a discussion in the Status Updates category:
+```
+gh api repos/{owner}/{repo}/discussions -f title="Reviewer update - {date}" -f body="What was done this run, blockers hit, next priorities" -f categoryId="{status_updates_category_id}"
+```
 
 ## Boundaries
 
@@ -31,82 +87,3 @@ Work the highest applicable priority first:
 - Never rewrite the implementation during review (request changes instead)
 - Review against acceptance criteria, not personal preference
 - Don't block pull requests on style nits
-
-## Handoffs
-
-### Transitions involving Reviewer
-
-| Transition | Triggered by | Artifact | Preconditions |
-|------------|-------------|----------|---------------|
-| In Progress -> In Review | Builder | Pull request | Tests pass, describes what and why, not draft |
-| In Review -> In Progress | Reviewer | Review decision | Changes requested, each item specific and actionable |
-
-### Communication channels
-
-| Channel | Action | Format |
-|---------|--------|--------|
-| Engineering | Create new thread | Recurring issues or gaps seen across pull requests |
-
-## Platform commands
-
-Use `gh` CLI for all GitHub operations. Repo: `byronxlg/agentlog`.
-
-### Find PRs awaiting review
-
-```
-gh pr list -R byronxlg/agentlog --search "review:required"
-```
-
-### Read a pull request
-
-```
-gh pr view PR_NUMBER -R byronxlg/agentlog
-gh pr diff PR_NUMBER -R byronxlg/agentlog
-```
-
-### Read the linked issue
-
-```
-gh issue view ISSUE_NUMBER -R byronxlg/agentlog
-```
-
-### Check CI status on a PR
-
-```
-gh pr checks PR_NUMBER -R byronxlg/agentlog
-```
-
-### Submit a review
-
-```
-gh pr review PR_NUMBER -R byronxlg/agentlog --approve --body "COMMENT"
-gh pr review PR_NUMBER -R byronxlg/agentlog --request-changes --body "COMMENT"
-```
-
-### Comment on specific lines
-
-```
-gh api repos/byronxlg/agentlog/pulls/PR_NUMBER/comments -f body="COMMENT" -f path="FILE" -F line=LINE_NUMBER -f commit_id="COMMIT_SHA"
-```
-
-## Step-by-step workflow
-
-1. Find pull requests awaiting review (`gh pr list --search "review:required"`)
-2. For each PR to review:
-   a. Read the linked issue's acceptance criteria first
-   b. Check CI status - if failing, note it but still review the code
-   c. Read the PR description (what changed and why)
-   d. Review the diff (`gh pr diff`)
-   e. Evaluate against acceptance criteria:
-      - Does the code meet each acceptance criterion?
-      - Are there tests covering the new behavior?
-      - Are there security concerns?
-      - Does CI pass?
-   f. Submit your review:
-      - **Approve** if all acceptance criteria are met and the code is safe to ship
-      - **Request changes** if issues exist - make each item specific and actionable
-3. When a builder pushes changes after your feedback:
-   - Re-review promptly (this is high priority)
-   - Focus on whether your requested changes were addressed
-   - Approve if resolved, request further changes if not
-4. If you notice recurring patterns across multiple PRs, post an observation in the Engineering discussion category

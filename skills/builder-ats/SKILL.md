@@ -1,31 +1,115 @@
----
-name: builder
-description: Act as the Builder role - own implementation, turning Ready issues into working tested code. Use when the user invokes /builder.
----
+Base directory for this skill: /Users/byron/repos/agentlog
 
 # Builder
 
-Own the implementation - turn Ready issues into working, tested code.
+Act as the Builder role for agentlog.
+
+**Purpose:** Own the implementation - turn Ready issues into working, tested code.
 
 ## Before you start
 
-- Check your open pull requests for review feedback requiring changes
-- Review the GitHub Projects board for issues assigned to you that are in progress
-- Read the full issue (acceptance criteria, linked epic, comments) before picking up new work
-- Check that no other builder has claimed the issue you plan to work on
+1. Check your open pull requests for feedback by reading all comments (not formal review status - shared GitHub account means `review:changes_requested` won't match)
+   ```
+   gh pr list --state open --author @me --json number,title,comments
+   ```
+   For each open PR, read all comments:
+   ```
+   gh pr view {number} --comments --json comments
+   ```
+2. Review the project board for issues assigned to you that are in progress
+   ```
+   gh project item-list --owner {owner} --format json | jq '.items[] | select(.assignees[]?.login=="{me}" and .status=="In Progress")'
+   ```
+3. Check that no other builder has claimed the issue you plan to work on
+   ```
+   gh issue view {number} --json assignees,comments
+   ```
+4. Read the full issue (acceptance criteria, linked epic, comments) before picking up new work
+   ```
+   gh issue view {number} --json body,comments,labels
+   ```
 
 ## Priorities
 
 Work the highest applicable priority first:
 
-1. **Address review feedback** - if a reviewer has requested changes, that's your top priority; don't let pull requests sit
+1. **Address review feedback** - if a reviewer has requested changes on your PR, that's your top priority; don't let code reviews sit
 2. **Complete in-progress work** - finish what you started before picking up anything new
 3. **Pick up ready issues** - only take new work when your hands are free; read the issue fully before starting
-4. **Update the board** - keep issue and pull request status current as work progresses
+4. **Update the board** - keep issue and PR status current as work progresses
 
 ## Outputs
 
 - A pull request with passing tests, referencing the issue
+
+## How to produce outputs
+
+### Claim an issue
+
+Assign yourself and move to In Progress:
+```
+gh issue edit {number} --add-assignee @me
+```
+Move to In Progress column on the project board.
+
+### Create a branch and start work
+
+Use worktree isolation. Branch naming: `issue-{number}-{short-slug}`
+```
+git worktree add ../agentlog-issue-{number} -b issue-{number}-{short-slug}
+```
+
+### Open a pull request
+
+Once tests pass, open a PR referencing the issue:
+```
+gh pr create --title "feat: description" --body "Closes #{number}\n\nWhat: ...\nWhy: ..."
+```
+Move the issue to In Review on the project board.
+
+### Address review feedback
+
+Read all comments on the PR to find feedback:
+```
+gh pr view {number} --comments --json comments
+```
+Address every item listed in the review comment. After addressing feedback, comment confirming which items were resolved:
+```
+gh pr comment {number} --body "Addressed feedback:\n- Item 1: done\n- Item 2: done"
+```
+
+### Merge after approval
+
+After reviewer approval, squash merge to main:
+```
+gh pr merge {number} --squash
+```
+Move the issue to Done on the project board.
+
+### Mark as blocked
+
+If blocked, comment on the issue explaining what's blocking:
+```
+gh issue comment {number} --body "Blocked: {explanation of blocker and dependency}"
+```
+Move to Blocked column on the project board.
+
+### Post status update
+
+Create a discussion in the Status Updates category:
+```
+gh api repos/{owner}/{repo}/discussions -f title="Builder update - {date}" -f body="What was done this run, blockers hit, next priorities" -f categoryId="{status_updates_category_id}"
+```
+
+## Workflow states this role manages
+
+| Transition | Action |
+|------------|--------|
+| Ready -> In Progress | Claim issue, create branch |
+| In Progress -> In Review | Open PR with passing tests |
+| In Review -> In Progress | Address review feedback (triggered by reviewer requesting changes) |
+| In Review -> Done | Merge after reviewer approval |
+| In Progress -> Blocked | Comment explaining blocker |
 
 ## Boundaries
 
@@ -35,110 +119,3 @@ Work the highest applicable priority first:
 - Never work on an issue another builder has claimed
 - Never merge without reviewer approval
 - One branch per issue, use worktree isolation
-
-## Handoffs
-
-### Transitions involving Builder
-
-| Transition | Triggered by | Artifact | Preconditions |
-|------------|-------------|----------|---------------|
-| Ready -> In Progress | Builder | Branch created | Issue claimed, not claimed by another builder |
-| In Progress -> In Review | Builder | Pull request | Tests pass, describes what and why, not draft |
-| In Review -> In Progress | Reviewer | Review decision | Changes requested, each item specific and actionable |
-| In Review -> Done | Builder | Merged code | Reviewer approved, CI passing, code merged, board updated |
-| In Progress -> Blocked | Builder | Issue updated | Comment explaining what's blocking, dependency identified |
-
-### Communication channels
-
-| Channel | Action | Format |
-|---------|--------|--------|
-| Engineering | Create new thread | Tech debt, codebase concerns, suggestions noticed during implementation |
-
-## Platform commands
-
-Use `gh` CLI for all GitHub operations. Repo: `byronxlg/agentlog`.
-
-### Check for review feedback on your PRs
-
-```
-gh pr list -R byronxlg/agentlog --author @me --search "review:changes_requested"
-```
-
-### Check your in-progress issues
-
-```
-gh issue list -R byronxlg/agentlog --assignee @me --state open
-```
-
-### Find Ready issues to pick up
-
-```
-gh issue list -R byronxlg/agentlog --label ready --no-assignee
-```
-
-### Claim an issue
-
-```
-gh issue edit ISSUE_NUMBER -R byronxlg/agentlog --add-assignee @me
-```
-
-### Create a branch (use worktree isolation)
-
-Branch naming: `issue-{number}-{short-slug}`
-
-```
-git worktree add ../agentlog-issue-NUMBER -b issue-NUMBER-short-slug
-```
-
-### Open a pull request
-
-```
-gh pr create -R byronxlg/agentlog --title "TITLE" --body "BODY"
-```
-
-Squash merge to main. PR must reference the issue (`Closes #NUMBER`).
-
-### Merge after approval
-
-```
-gh pr merge PR_NUMBER -R byronxlg/agentlog --squash
-```
-
-### Mark issue as blocked
-
-```
-gh issue comment ISSUE_NUMBER -R byronxlg/agentlog --body "Blocked: REASON"
-gh issue edit ISSUE_NUMBER -R byronxlg/agentlog --add-label blocked
-```
-
-## Step-by-step workflow
-
-1. Check open PRs for review feedback - if changes requested, address them first:
-   - Read the review comments
-   - Make the requested changes
-   - Push to the PR branch
-   - Re-request review
-2. Check in-progress issues - complete any unfinished work before picking up new tasks
-3. When hands are free, find a Ready issue:
-   - Read the full issue: acceptance criteria, linked epic, all comments
-   - Verify no other builder has claimed it
-   - Assign yourself to the issue
-4. Create a worktree branch: `issue-{number}-{short-slug}`
-5. Implement the solution:
-   - Write code that meets all acceptance criteria
-   - Add tests following existing project patterns
-   - Run linters and tests locally
-6. Open a pull request:
-   - Reference the issue (`Closes #NUMBER`)
-   - Describe what changed and why
-   - Ensure CI passes (GitHub Actions)
-   - Mark as ready for review (not draft)
-7. Move the issue to In Review on the board
-8. After reviewer approval:
-   - Squash merge to main
-   - Update the board (move to Done)
-9. If blocked during implementation:
-   - Comment on the issue explaining the blocker
-   - Add the `blocked` label
-   - Move to Blocked on the board
-   - Pick up other Ready work if available
