@@ -11,12 +11,12 @@ skillfold check -g
 ```
 
 To use both agents, set `targets: [claude, codex]` in
-`~/.claude/skillfold.yaml`, then run `skillfold install -g`. Skillfold 2.4.0+
+`~/.config/skillfold/skillfold.yaml`, then run `skillfold install -g`. Skillfold 2.4.0+
 can restrict an individual skill with `targets: [claude]` or `targets: [codex]`.
 
 Byron's complete selection and exact source pins live in
-[dotfiles](https://github.com/byronxlg/dotfiles), under `.claude/skillfold.yaml`
-and `.claude/skillfold.lock`. Dotfiles installs Skillfold through npm and runs
+[dotfiles](https://github.com/byronxlg/dotfiles), under `.config/skillfold/skillfold.yaml`
+and `.config/skillfold/skillfold.lock`. Dotfiles installs Skillfold through npm and runs
 `skillfold install -g --frozen`. Third-party skills are imported directly from
 upstream rather than copied into this repository.
 

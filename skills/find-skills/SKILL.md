@@ -9,7 +9,7 @@ model: sonnet
 
 This skill searches for ready-made SKILL.md files and installs them locally.
 
-Skills are managed by Skillfold. The global manifest in `~/dotfiles/.claude/skillfold.yaml` selects skills for Claude and Codex; installed copies are generated. Search uses GitHub code search and web search.
+Skills are managed by Skillfold. The global manifest in `~/dotfiles/.config/skillfold/skillfold.yaml` selects skills for Claude and Codex; installed copies are generated. Search uses GitHub code search and web search.
 
 ## How to find skills
 
