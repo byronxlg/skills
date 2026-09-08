@@ -1,66 +1,67 @@
-# byronxlg-skills
+# Skills
 
-Personal and adapted skills for Claude Code and Codex.
+Personal and adapted skills for Claude Code and Codex, managed with
+[Skillfold](https://github.com/byronxlg/skillfold).
+
+## Available skills
+
+| Skill | What it does | Example request |
+| --- | --- | --- |
+| [dbt](skills/dbt/SKILL.md) | Builds and changes dbt models, writes transformations and tests, diagnoses failures, and checks downstream impact. Adapted to work without MCP dependencies. | “Add a model for monthly revenue and validate the results.” |
+| [find-skills](skills/find-skills/SKILL.md) | Searches GitHub and the web for existing skills, compares candidates, and installs selected skills with Skillfold. | “Find a skill for managing GitHub releases.” |
+| [issue](skills/issue/SKILL.md) | Turns a request into a GitHub issue with background, requirements, and acceptance criteria. Shows the draft before creating it. | “Create an issue for adding CSV exports.” |
+| [obsidian](skills/obsidian/SKILL.md) | Finds, creates, and edits Markdown notes across Byron's vaults while preserving frontmatter, wikilinks, and vault conventions. | “Find my project notes and update the next steps.” |
+| [polymarket](skills/polymarket/SKILL.md) | Looks up prediction markets, prices, order books, positions, orders, and balances. Places or cancels trades only when explicitly requested. | “What are the markets saying about this event?” |
+| [project-idea-validator](skills/project-idea-validator/SKILL.md) | Researches competitors and demand, challenges assumptions, and gives an evidence-backed go/no-go assessment with possible MVPs or pivots. | “Pressure-test this product idea before we build it.” |
+| [tts](skills/tts/SKILL.md) | Converts text into spoken audio, with voice, speed, and tone controls, voice comparisons, and paragraph splitting. Uses the OpenAI audio API with credentials from Doppler. | “Read this script aloud and compare two voices.” |
+
+Some skills use Byron's personal paths and credential conventions. Read the linked
+instructions for prerequisites and supporting scripts before using them elsewhere.
 
 ## Install with Skillfold
 
-```bash
+```sh
 npm install -g skillfold
 skillfold add -g github:byronxlg/skills/skills/obsidian
 skillfold check -g
 ```
 
-To use both agents, set `targets: [claude, codex]` in
-`~/.config/skillfold/skillfold.yaml`, then run `skillfold install -g`. Skillfold 2.4.0+
-can restrict an individual skill with `targets: [claude]` or `targets: [codex]`.
+Replace `obsidian` with a directory name from the table. Omit `-g` to install for
+the current project instead of your user account.
 
-Byron's complete selection and exact source pins live in
-[dotfiles](https://github.com/byronxlg/dotfiles), under `.config/skillfold/skillfold.yaml`
-and `.config/skillfold/skillfold.lock`. Dotfiles installs Skillfold through npm and runs
-`skillfold install -g --frozen`. Third-party skills are imported directly from
-upstream rather than copied into this repository.
+Skillfold 2.5.0+ keeps global configuration in
+`~/.config/skillfold/skillfold.yaml` (or `$XDG_CONFIG_HOME/skillfold/skillfold.yaml`).
+To install for both agents, set `targets: [claude, codex]` in that manifest and
+run `skillfold install -g`. An individual skill can use a mapping with `source`
+and `targets: [claude]` or `targets: [codex]` to restrict its destination.
 
-Edit personal skill sources here, commit and push, then update the consumer:
+Byron's selection and exact source pins live in
+[dotfiles](https://github.com/byronxlg/dotfiles), under
+`.config/skillfold/skillfold.yaml` and `.config/skillfold/skillfold.lock`.
+Third-party skills are imported directly from upstream.
 
-```bash
+## Change a skill
+
+Edit its source here, commit and push, then apply the change:
+
+```sh
 skillfold update -g obsidian
 skillfold check -g
 ```
 
-Commit the resulting dotfiles lockfile. Installed copies in `~/.claude/skills`
-and `~/.agents/skills` are generated and should not be edited.
+Commit and push the resulting dotfiles lockfile. `add`, `update`, and `remove`
+already apply their changes. After editing the manifest directly, run
+`skillfold install -g`; after pulling a changed manifest and lockfile, run
+`skillfold install -g --frozen`.
 
-## Personal and adapted skills
+Installed copies under `~/.claude/skills` and `~/.agents/skills` are generated.
+Make changes in this repository rather than editing those copies.
 
-| Skill | Purpose |
-| --- | --- |
-| `dbt` | Adapted dbt analytics workflow without MCP dependencies |
-| `find-skills` | Discover skills and install them with Skillfold |
-| `obsidian` | Work with Byron's Obsidian vaults |
-| `polymarket` | Query markets and carry out explicitly requested trades |
-| `tts` | Generate spoken audio |
-| `issue` | Draft and create GitHub issues |
-| `project-idea-validator` | Research and assess product ideas |
+## Attribution and license
 
-These were migrated from `byronxlg/dotfiles` at commit `206c3f0`.
-`dbt` derives from dbt-labs/dbt-agent-skills, with the original author metadata
-and Apache-2.0 license retained in its directory. Other third-party terms,
-where supplied within a skill, take precedence over the repository license.
+These seven skills were migrated from `byronxlg/dotfiles` at commit `206c3f0`.
+`dbt` derives from [dbt-labs/dbt-agent-skills](https://github.com/dbt-labs/dbt-agent-skills),
+with its author metadata and [Apache-2.0 license](skills/dbt/LICENSE) retained.
 
-## Skills
-
-### Agent Team
-
-A framework for creating and managing teams of Claude Code agents with defined roles, workflows, and coordination rules.
-
-| Skill | Description |
-|-------|-------------|
-| `/agent-team-setup` | Walk through setting up a new agent team project from scratch |
-| `/director` | Act as the Director - vision, strategy, priorities, business blog posts |
-| `/lead` | Act as the Lead - triage, create issues, manage the board, technical blog posts |
-| `/builder` | Act as the Builder - implement issues, write tests, open PRs |
-| `/reviewer` | Act as the Reviewer - review PRs against acceptance criteria |
-
-## License
-
-MIT
+Original work is covered by the repository's [MIT license](LICENSE).
+Third-party terms supplied within a skill take precedence for that material.
