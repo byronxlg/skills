@@ -27,10 +27,9 @@ Rules are always-on instructions, installed by Skillfold 2.6.0+ according to the
 | --- | --- | --- |
 | [communication-style](rules/communication-style.md) | Keeps writing concise and sets code, review, and formatting preferences. | Claude and Codex |
 | [doppler](rules/doppler.md) | Discovers credentials through Doppler and reads secret notes before use. | Claude and Codex |
-| [dotfiles-workflow](rules/dotfiles-workflow.md) | Explains Stow ownership and requires task changes to be committed and pushed. | Claude and Codex |
+| [dotfiles-workflow](rules/dotfiles-workflow.md) | Stow ownership, Skillfold-managed skills and rules, and the commit-and-push requirement. | Claude and Codex |
 | [infra-writes](rules/infra-writes.md) | Routes infrastructure changes through versioned code and GitHub Actions. | Claude and Codex |
 | [kubectl-context](rules/kubectl-context.md) | Requires explicit Kubernetes and Helm contexts. | Claude and Codex |
-| [skills](rules/skills.md) | Explains how to change, install, check, and pin skills and rules with Skillfold. | Claude and Codex |
 | [tool-preferences](rules/tool-preferences.md) | Sets preferred command-line search and data-processing tools. | Claude and Codex |
 | [codex-compatibility](rules/codex-compatibility.md) | Adapts Claude skill examples and repository instructions for Codex. | Codex only |
 | [doppler-secrets](rules/hosts/Byrons-Mac-mini/doppler-secrets.md) | Defines Doppler projects, credential scoping, and on-demand access. | Byrons-Mac-mini only |
