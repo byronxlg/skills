@@ -20,9 +20,10 @@ machines, and the bootstrap for everything else. Code never reads from Doppler. 
 Doppler projects; the two above are the whole list.
 
 **Parameter Store is for repos** - each repo's scoped keys live under its own path, provisioned
-from the admin keys, in `ap-southeast-2`. Terraform owns the parameter name and type
-(`value = "PLACEHOLDER"`, `lifecycle { ignore_changes = [value] }`); the value is written out of
-band and never enters Terraform state or the repo.
+from the admin keys, in `ap-southeast-2`. Parameters are created and rotated only with
+`aws ssm put-parameter`, never through Terraform: the `aws_ssm_parameter` resource reads the
+decrypted value into state on every refresh, whatever `ignore_changes` says. Terraform manages
+the IAM that reads a path, nothing else; the project's runbook lists which keys exist.
 
 ## Key scoping rules
 
