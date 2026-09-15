@@ -1,69 +1,80 @@
-# Secret management: Doppler
+# Secret management: Doppler for admin keys, SSM Parameter Store for projects
 
-All credentials are managed in Doppler. Never store secrets in plaintext files, `.env` files, or committed configs.
+Never store secrets in plaintext files, `.env` files, or committed configs.
 
-## Hierarchy
+## Two layers
 
 ```
-Doppler
-├── global (project)
-│   └── home (config)
-│       └── Admin/root-level keys shared across all machines
-│           e.g. OPENAI_API_KEY, CLOUDFLARE_API_TOKEN, GH_TOKEN
-│
-└── <repo-name> (project, one per repo)
-    ├── dev (config)
-    │   └── Scoped keys for local development
-    └── prd (config)
-        └── Scoped keys for production
+Doppler (admin only, two projects, never more)
+├── global / home              Byron's admin keys shared across machines and tools
+│                              e.g. OPENAI_API_KEY, CLOUDFLARE_API_TOKEN, GH_TOKEN, AWS_*
+└── northwindcapital / admin   North Wind Capital company-level keys and reference IDs
+
+AWS SSM Parameter Store (one path per repo, in the account that owns the repo)
+└── /<project>/<env>/<KEY>     SecureString, env is dev or prd, KEY is what the code reads
+                               e.g. /pdw/prd/AKAHU_APP_TOKEN
 ```
 
-**Global is for personal infrastructure** - keys you use as a human across tools and machines. Code never reads from global directly.
+**Doppler is for personal and company infrastructure** - keys a human uses across tools and
+machines, and the bootstrap for everything else. Code never reads from Doppler. Do not create
+Doppler projects; the two above are the whole list.
 
-**Project configs are for repos** - one Doppler project per repo, with separate configs per environment. Keys here are scoped, provisioned from global admin keys, and stored only in Doppler.
+**Parameter Store is for repos** - each repo's scoped keys live under its own path, provisioned
+from the admin keys, in `ap-southeast-2`. Terraform owns the parameter name and type
+(`value = "PLACEHOLDER"`, `lifecycle { ignore_changes = [value] }`); the value is written out of
+band and never enters Terraform state or the repo.
 
 ## Key scoping rules
 
-- **Assume admin scope**: keys in `global/home` like `OPENAI_API_KEY`, `CLOUDFLARE_API_TOKEN`, `GH_TOKEN` are provisioned with broad permissions. Never use them directly in project code or CI/CD.
-- **Create scoped keys for projects**: use the admin key once to provision a narrowly-scoped key, then store that in the project's Doppler config.
-- **Principle of least privilege**: the project key should have exactly the access the project needs - no more.
-- **Why**: if a scoped key leaks, the blast radius is contained. An admin key leak can compromise the entire account.
+- **Assume admin scope**: keys in `global/home` and `northwindcapital/admin` are provisioned with
+  broad permissions. Never use them directly in project code, containers or CI.
+- **Create scoped keys for projects**: use the admin key once to provision a narrowly-scoped key,
+  then store that under the project's SSM path.
+- **Principle of least privilege**: the project key has exactly the access the project needs.
+  Workloads read their own path with an IAM identity limited to `ssm:GetParametersByPath` and
+  `kms:Decrypt` on that path; GitHub Actions assumes a role through OIDC.
+- **Why**: if a scoped key leaks, the blast radius is one path. An admin key leak is the account.
 
 ## On-demand access
 
 Secrets are not auto-loaded into the shell. Fetch them explicitly when needed.
 
-**Run a command with secrets injected:**
+**Run a command with admin keys injected:**
 ```sh
-doppler run --project <name> --config <config> -- <command>
+doppler run --project global --config home -- <command>
 ```
 
-**Fetch secrets for a project:**
+**Run a command with a project's secrets injected:**
 ```sh
-doppler secrets --project <name> --config <config>
+doppler run --project global --config home -- chamber exec <project>/<env> -- <command>
 ```
 
-**Download as env vars (stdout):**
+**Write or rotate a project secret** (the value goes through a 0600 file, never argv):
 ```sh
-doppler secrets download --project <name> --config <config> --no-file --format env
+doppler run --project global --config home -- \
+  aws ssm put-parameter --region ap-southeast-2 --cli-input-json file://<tmp>.json
 ```
 
-**List projects and configs:**
+**List what a project has, names only:**
 ```sh
-doppler projects
-doppler configs --project <name>
+doppler run --project global --config home -- \
+  aws ssm describe-parameters --region ap-southeast-2 \
+  --parameter-filters "Key=Path,Option=Recursive,Values=/<project>" --query 'Parameters[].Name'
 ```
+
+Never print a secret value into a terminal, a log, a commit or chat; compare hashes when a copy
+has to be verified.
 
 ## Setup
 
-**New machine**: install Doppler (`brew install dopplerhq/cli/doppler`) and run `doppler login`. Handled by `setup_macos.sh`.
+**New machine**: install Doppler (`brew install dopplerhq/cli/doppler`) and run `doppler login`;
+install chamber (`brew install chamber`). Handled by `setup_macos.sh`.
 
-**Headless machines**: set `DOPPLER_TOKEN` to a Doppler service token. The Doppler CLI checks this variable automatically.
-
-## CC_ prefix convention is retired
-
-A `CC_` prefix convention for Claude Code credentials (e.g. `CC_GH_TOKEN`) was briefly introduced and then reverted. Do not use or reference `CC_`-prefixed env vars. Use the Doppler-injected names directly (e.g. `GH_TOKEN`).
+**Headless machines**: set `DOPPLER_TOKEN` to a Doppler service token for `global/home`, or give
+the machine an IAM identity for its paths. The Doppler CLI checks that variable automatically.
 
 ## Never revoke, delete, or rotate credentials without explicit instruction
 
-Revoking a credential is irreversible. Do not revoke, delete, or rotate any key - even one that appears superseded or unused - unless explicitly asked. The key may be in use by other tools, sessions, or people outside your visibility.
+Revoking a credential is irreversible. Do not revoke, delete, or rotate any key - even one that
+appears superseded or unused - unless explicitly asked. The key may be in use by other tools,
+sessions, or people outside your visibility.
