@@ -31,9 +31,12 @@ Rules are always-on instructions, installed by Skillfold 2.6.0+ according to the
 | [infra-writes](rules/infra-writes.md) | Routes infrastructure changes through versioned code and GitHub Actions. | Claude and Codex |
 | [kubectl-context](rules/kubectl-context.md) | Requires explicit Kubernetes and Helm contexts. | Claude and Codex |
 | [tool-preferences](rules/tool-preferences.md) | Sets preferred command-line search and data-processing tools. | Claude and Codex |
+| [project-notes](rules/project-notes.md) | Reads the Obsidian project note for the current repo before substantive work, if one exists. | Claude and Codex |
 | [codex-compatibility](rules/codex-compatibility.md) | Adapts Claude skill examples and repository instructions for Codex. | Codex only |
 | [doppler-secrets](rules/hosts/Byrons-Mac-mini/doppler-secrets.md) | Defines Doppler projects, credential scoping, and on-demand access. | Byrons-Mac-mini only |
 | [telegram](rules/hosts/Byrons-Mac-mini/telegram.md) | Documents the personal Telegram notification channel. | Byrons-Mac-mini only |
+
+Rules are behaviour only and short: `bin/check-rules` (CI) fails a rule over 12 non-blank lines unless `rules/.long-rules` names it with a reason. Facts go to the repo or fleet docs that own them; procedures become skills.
 
 Declare a rule source in `~/.config/skillfold/skillfold.yaml`, then run
 `skillfold install -g` and `skillfold check -g`:

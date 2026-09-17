@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Rules are behaviour, loaded into every session. Keep them short: a rule over
+# MAX non-blank lines fails unless listed in rules/.long-rules (one path per
+# line, with a reason after a tab). Facts and procedures belong elsewhere.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+MAX=12
+fail=0
+while IFS= read -r f; do
+  n=$(grep -cve '^[[:space:]]*$' "$f" || true)
+  if [ "$n" -gt "$MAX" ]; then
+    if grep -q "^$f" rules/.long-rules 2>/dev/null; then
+      echo "warn  $f: $n lines, grandfathered ($(grep "^$f" rules/.long-rules | cut -f2-))"
+    else
+      echo "FAIL  $f: $n non-blank lines (max $MAX). Move facts and procedures out, or list it in rules/.long-rules with a reason."
+      fail=1
+    fi
+  else
+    echo "ok    $f: $n lines"
+  fi
+done < <(find rules -name '*.md' | sort)
+exit $fail
