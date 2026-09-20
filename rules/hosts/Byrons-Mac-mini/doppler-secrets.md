@@ -12,7 +12,7 @@ Doppler (admin only, two projects, never more)
 
 AWS SSM Parameter Store (one path per repo, in the account that owns the repo)
 └── /<project>/<env>/<KEY>     SecureString, env is dev or prd, KEY is what the code reads
-                               e.g. /pdw/prd/AKAHU_APP_TOKEN
+                               the project's runbook/dependencies.md lists its keys
 ```
 
 **Doppler is for personal and company infrastructure** - keys a human uses across tools and
