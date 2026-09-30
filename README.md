@@ -8,6 +8,7 @@ Personal and adapted skills and rules for Claude Code and Codex, managed with
 | Skill | What it does | Example request |
 | --- | --- | --- |
 | [dbt](skills/dbt/SKILL.md) | Builds and changes dbt models, writes transformations and tests, diagnoses failures, and checks downstream impact. Adapted to work without MCP dependencies. | “Add a model for monthly revenue and validate the results.” |
+| [dd-prompt-to-table](skills/dd-prompt-to-table/SKILL.md) | Turns food vibes and a budget into a delivered DoorDash order with the official dd-cli: verifies and sets up the CLI, picks a restaurant and items, previews the all-in price, places the order with no tip, and pings Telegram with the arrival time. | “Something light, not sushi, ideally NZ$25 - order it.” |
 | [find-skills](skills/find-skills/SKILL.md) | Searches GitHub and the web for existing skills, compares candidates, and installs selected skills with Skillfold. | “Find a skill for managing GitHub releases.” |
 | [issue](skills/issue/SKILL.md) | Turns a request into a GitHub issue with background, requirements, and acceptance criteria. Shows the draft before creating it. | “Create an issue for adding CSV exports.” |
 | [obsidian](skills/obsidian/SKILL.md) | Finds, creates, and edits Markdown notes across Byron's vaults while preserving frontmatter, wikilinks, and vault conventions. | “Find my project notes and update the next steps.” |
