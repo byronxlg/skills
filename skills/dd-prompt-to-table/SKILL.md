@@ -7,15 +7,17 @@ description: Order food on DoorDash end to end from a vibe and a budget using Do
 
 Byron gives vibes and a budget; you turn that into a delivered meal with `dd-cli`, DoorDash's
 official CLI (github.com/doordash-oss/doordash-cli). The first run (2026-09-30) went from
-"not that hungry, had sushi for lunch, ideally NZ$25" to a NZ$23.18 order and a Telegram ping
-in about ten minutes.
+"not that hungry, had sushi for lunch, ideally NZ$25" to a NZ$20.18 meal (plus a NZ$3 tip,
+which is no longer allowed - see below) and a Telegram ping in about ten minutes.
 
 ## Authorization
 
 - The request itself is the authorization: vibes + budget + "order it" means place the order
   without checking back, within budget. `dd-cli`'s own help text says to confirm tip and card
   with the consumer before submit - Byron's upfront request satisfies that. Still name the card
-  and tip in your narration.
+  in your narration.
+- **Never tip.** Byron's standing instruction: always `--tip-cents 0`. That is his explicit
+  decline, so don't ask about or suggest a tip, and don't add one to use up spare budget.
 - Research, menus, carts and previews are free. `order submit` is the only command that spends.
 - No budget, no clear ask to order, or the best option is over budget: stop and ask.
 - Never submit twice for one request. Submit has no idempotency; a retry is a second order.
@@ -56,7 +58,7 @@ in about ten minutes.
 ## Ordering flow
 
 1. **Ask** (only if missing): vibes (cuisine or feeling, hunger level, who it's for), budget in
-   local currency, allergies. Treat the budget as all-in: food + delivery + fees + tip.
+   local currency, allergies. Treat the budget as all-in: food + delivery + fees (no tip).
 2. **Address.** `dd-cli --json-output address list --intent "$INTENT"` - use the entry with
    `is_default: true` and pass its `address_id` everywhere.
 3. **Search wide.** Several queries that fit the vibe, not one:
@@ -70,7 +72,7 @@ in about ten minutes.
    several queries. Check the local time: late evening, avoid stores that close soon.
 4. **Menu.** `dd-cli --json-output menu --store-id <id> --intent "$INTENT"` gives `menu_id`,
    `store_is_open`, and `items[]` with `item_id`, `name`, `price`, `description`,
-   `has_required_modifiers`, `is_orderable`. Budget roughly NZ$6-9 for delivery, fees and tip
+   `has_required_modifiers`, `is_orderable`. Budget roughly NZ$5-9 for delivery and fees
    (delivery fee varies by store: NZ$2.99 to NZ$5.99 seen), so a NZ$25 budget means about
    NZ$15-18 of food.
 5. **Cart.** First `cart list --store-id <id>`. Items append to an existing cart, so if one
@@ -86,13 +88,13 @@ in about ten minutes.
 6. **Preview.** `dd-cli order preview --cart-uuid <uuid> --beautify --intent "$INTENT"` shows
    subtotal, delivery fee, fees, "Total before tip", and delivery options with an ETA. Read-only
    unless `--fulfillment` is passed.
-7. **Tip and card.** No suggested tip came back on the first run; choose one that keeps the
-   total in budget (NZ$3 on a ~NZ$20 order). Name the card: `payment-method list`, the
+7. **Card.** No tip (see Authorization), so the preview's "Total before tip" is the final
+   total and must be within budget. Name the card: `payment-method list`, the
    `cards[]` entry whose `payment_method_id` equals `default_payment_method_id` (brand + last4).
    An empty `cards[]` means the default may be a wallet - stop and ask.
 8. **Submit once.**
    ```sh
-   dd-cli --json-output order submit --cart-uuid <uuid> --tip-cents 300 --yes --intent "$INTENT"
+   dd-cli --json-output order submit --cart-uuid <uuid> --tip-cents 0 --yes --intent "$INTENT"
    ```
    Without `--yes`, a non-TTY call hits `Proceed? [y/N]: Aborted!` (nothing charged). Success
    returns `success: true` and an `order_uuid`. On any error or ambiguous result, check
