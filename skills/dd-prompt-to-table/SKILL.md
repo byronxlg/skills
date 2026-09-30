@@ -38,8 +38,11 @@ which is no longer allowed - see below) and a Telegram ping in about ten minutes
 2. **Login.** Browser OAuth, so Byron runs it: ask him to type `! dd-cli login`. The token lands
    in the macOS keychain.
 3. **Smoke test.** `address list` (below). `Error: The user is forbidden.` on every command means
-   the account is not yet off the waitlist (https://forms.gle/gvCQZvu9C1EKA6aM6) - stop and say
-   so. It cleared for Byron a few days after first login.
+   the account has no beta access yet - stop and say so. Access is an early-access beta: join
+   the waitlist (https://forms.gle/gvCQZvu9C1EKA6aM6), DoorDash emails a CLI Beta Participation
+   Agreement to accept, then a "selected for early access" email. Access is tied to the email on
+   the DoorDash account used on the waitlist form, and is conditional on giving DoorDash feedback
+   (they schedule short user research calls). Byron's access came through on 2026-09-29.
 
 ## CLI conventions
 
