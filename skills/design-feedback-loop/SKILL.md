@@ -1,6 +1,6 @@
 ---
 name: design-feedback-loop
-description: Present design options to a human and collect their feedback through reactive, low-friction methods (try-on, duels, brackets, points budgets, sliders, drawing on the design, before/after wipes) instead of asking for written critique. Use whenever UI, page, screen or visual design work needs Byron's taste in the loop - choosing between directions, tuning a layout, flagging what is off, or running a design review with several people. Also use when he asks how to show him options, how to get feedback on a design, or to "let me pick".
+description: Present design options to a human and collect their feedback through reactive, low-friction methods (try-on, duels, brackets, points budgets, sliders, drawing on the design, before/after wipes) instead of asking for written critique. Use whenever UI, page, screen or visual design work needs a person's taste in the loop - choosing between directions, tuning a layout, flagging what is off, or running a design review with several people. Also use when someone asks how to be shown options, how to get feedback on a design, or to "let me pick".
 ---
 
 # Design feedback loop
@@ -11,8 +11,9 @@ points: show options, let them pick and react, and turn that into the spec. This
 skill covers how to present options and collect feedback with as little effort
 from the human as possible.
 
-It complements the `design-work` rule: that rule covers planning, prototypes and the
-blind juror; this skill covers the rounds where a human chooses and reacts.
+It complements any planning or prototyping process you already follow (design guide,
+prototypes, automated review); this skill covers the rounds where a human chooses and
+reacts.
 
 ## Core principles
 
@@ -39,7 +40,7 @@ blind juror; this skill covers the rounds where a human chooses and reacts.
 
 ## Method catalogue
 
-Ratings come from Byron's hands-on testing (2026-11-05). Prefer the good methods.
+Ratings come from hands-on testing of each method on a real design task. Prefer the good methods.
 
 ### Good
 
@@ -86,7 +87,7 @@ Ratings come from Byron's hands-on testing (2026-11-05). Prefer the good methods
 6. Always running: history scrubber and attention tracking.
 7. Build against the locked choices, then record what was picked and rejected (with
    reasons) in the project's design guide, so future first-round options start
-   closer to Byron's taste.
+   closer to the person's taste.
 
 Keep each round to one screen of decisions. Lock earlier choices so they do not drift
 in later rounds, and say in one line what the next round will be.
