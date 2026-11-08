@@ -22,13 +22,13 @@ instructions for prerequisites and supporting scripts before using them elsewher
 ## Available rules
 
 Rules are always-on instructions, installed by Skillfold 2.6.0+ according to the
-`rules` selection in the dotfiles manifest.
+`rules` selection in the global manifest (`~/.config/skillfold/`).
 
 | Rule | What it does | Scope in Byron's config |
 | --- | --- | --- |
 | [communication-style](rules/communication-style.md) | Keeps writing concise and sets code, review, and formatting preferences. | Claude and Codex |
 | [doppler](rules/doppler.md) | Discovers credentials through Doppler and reads secret notes before use. | Claude and Codex |
-| [dotfiles-workflow](rules/dotfiles-workflow.md) | Stow ownership, Skillfold-managed skills and rules, and the commit-and-push requirement. | Claude and Codex |
+| [dotfiles-workflow](rules/dotfiles-workflow.md) | Stow ownership of dotfiles, where Claude config lives, and Skillfold-managed skills and rules. | Claude and Codex |
 | [infra-writes](rules/infra-writes.md) | Routes infrastructure changes through versioned code and GitHub Actions. | Claude and Codex |
 | [kubectl-context](rules/kubectl-context.md) | Requires explicit Kubernetes and Helm contexts. | Claude and Codex |
 | [tool-preferences](rules/tool-preferences.md) | Sets preferred command-line search and data-processing tools. | Claude and Codex |
@@ -56,8 +56,7 @@ rules:
 Claude gets individual files under `~/.claude/rules/`; Codex gets a managed block
 in `~/.codex/AGENTS.md`. Hostnames match exactly. All sources remain pinned in the
 same lockfile; only matching rules are installed. Edit source rules here and push,
-then run `skillfold update -g <rule-name>` and `skillfold check -g` and commit the
-dotfiles lockfile. Do not edit generated instructions.
+then run `skillfold update -g <rule-name>` and `skillfold check -g`. Do not edit generated instructions.
 
 ## Install with Skillfold
 
@@ -76,9 +75,8 @@ To install for both agents, set `targets: [claude, codex]` in that manifest and
 run `skillfold install -g`. An individual skill can use a mapping with `source`
 and `targets: [claude]` or `targets: [codex]` to restrict its destination.
 
-Byron's selection and exact source pins live in
-[dotfiles](https://github.com/byronxlg/dotfiles), under
-`.config/skillfold/skillfold.yaml` and `.config/skillfold/skillfold.lock`.
+Byron's selection and exact source pins live unversioned in
+`~/.config/skillfold/skillfold.yaml` and `skillfold.lock` on each machine.
 Third-party skills are imported directly from upstream.
 
 ## Change a skill
@@ -90,7 +88,7 @@ skillfold update -g obsidian
 skillfold check -g
 ```
 
-Commit and push the resulting dotfiles lockfile. `add`, `update`, and `remove`
+`add`, `update`, and `remove`
 already apply their changes. After editing the manifest directly, run
 `skillfold install -g`; after pulling a changed manifest and lockfile, run
 `skillfold install -g --frozen`.
