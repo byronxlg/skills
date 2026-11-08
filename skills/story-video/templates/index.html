@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080" />
+  <title>Story video</title>
+  <!-- Copy gsap.min.js and a font file into assets/. Keep everything local. -->
+  <script src="assets/gsap.min.js"></script>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/inter.woff2") format("woff2"); font-weight: 100 900; font-display: block; }
+    :root { --bg: #0b2a3f; --accent: #13b5ea; --accent-dark: #0a7fc0; --ink: #1d2b36; --muted: #5f6f7c; --soft: #cfe6f3; }
+    body { margin: 0; background: var(--bg); font-family: "Inter", sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+    #root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    .clip { position: absolute; inset: 0; }
+    .center { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .caption { position: absolute; left: 0; right: 0; top: 120px; text-align: center; font-size: 56px; font-weight: 800; letter-spacing: -0.02em; }
+    .hl { color: var(--accent); }
+    .card { background: #fff; color: var(--ink); border-radius: 24px; box-shadow: 0 40px 120px rgba(0,0,0,.35); }
+    .kicker { font-size: 24px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .14em; }
+    .source { position: absolute; left: 0; right: 0; bottom: 50px; text-align: center; font-size: 22px; color: var(--soft); }
+    .cursor { position: absolute; left: 0; top: 0; width: 40px; height: 40px; }
+
+    /* Scene 1: typing + click */
+    #s1-card { position: absolute; left: 410px; top: 300px; width: 1100px; padding: 44px 52px; box-sizing: border-box; }
+    .field { border: 2px solid var(--accent); border-radius: 14px; padding: 18px 22px; font-size: 36px; font-weight: 700; min-height: 46px; margin-bottom: 26px; }
+    .caret { display: inline-block; width: 3px; height: 40px; background: var(--accent); vertical-align: -6px; margin-left: 2px; }
+    .btn { display: inline-block; background: var(--accent-dark); color: #fff; font-size: 26px; font-weight: 700; padding: 16px 40px; border-radius: 14px; }
+
+    /* Scene 2: stats */
+    #s2-grid { position: absolute; left: 160px; top: 320px; width: 1600px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .stat { text-align: center; padding: 48px 36px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 24px; }
+    .stat .num { font-size: 96px; font-weight: 800; }
+    .stat .txt { font-size: 32px; font-weight: 600; color: var(--soft); margin-top: 16px; }
+
+    /* Scene 3: steps rail + stage */
+    #s3-rail { position: absolute; left: 120px; top: 320px; width: 480px; }
+    .rail-item { display: flex; align-items: center; gap: 22px; height: 112px; font-size: 31px; font-weight: 700; color: rgba(255,255,255,.4); }
+    .rail-dot { flex: none; width: 56px; height: 56px; border-radius: 50%; border: 3px solid rgba(255,255,255,.25); display: grid; place-items: center; font-weight: 800; }
+    .stage { position: absolute; left: 660px; top: 300px; width: 1140px; }
+    .stage h2 { margin: 0 0 30px; font-size: 60px; font-weight: 800; }
+    .stage .card { padding: 40px 46px; font-size: 30px; line-height: 1.5; }
+
+    /* Scene 4: outro */
+    #s4-title { font-size: 120px; font-weight: 800; letter-spacing: -0.035em; }
+    #s4-team { font-size: 30px; font-weight: 600; margin-top: 26px; }
+  </style>
+</head>
+<body>
+  <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="30">
+
+    <section id="s1" class="clip" data-start="0" data-duration="7" data-track-index="1">
+      <div id="s1-cap" class="caption">Someone has a problem.</div>
+      <div id="s1-card" class="card">
+        <div class="field"><span id="s1-typed"></span><span class="caret"></span></div>
+        <span id="s1-btn" class="btn">Send</span>
+      </div>
+      <svg id="s1-cursor" class="cursor" viewBox="0 0 24 24"><path d="M4 2l16 10-7 1.6L9.8 21z" fill="#fff" stroke="#0b2a3f" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </section>
+
+    <section id="s2" class="clip" data-start="7" data-duration="8" data-track-index="1">
+      <div id="s2-cap" class="caption">Why it <span class="hl">matters.</span></div>
+      <div id="s2-grid">
+        <div class="stat"><div class="num">00</div><div class="txt">first sourced stat</div></div>
+        <div class="stat"><div class="num">00%</div><div class="txt">second sourced stat</div></div>
+        <div class="stat"><div class="num">00</div><div class="txt">third sourced stat</div></div>
+      </div>
+      <div id="s2-src" class="source">Source: where these numbers come from</div>
+    </section>
+
+    <section id="s3" class="clip" data-start="15" data-duration="9" data-track-index="1">
+      <div id="s3-rail">
+        <div class="rail-item" id="r1"><span class="rail-dot">1</span>Step one</div>
+        <div class="rail-item" id="r2"><span class="rail-dot">2</span>Step two</div>
+        <div class="rail-item" id="r3"><span class="rail-dot">3</span>Step three</div>
+      </div>
+      <div class="stage" id="st1"><h2>What step one shows</h2><div class="card">Real example content for step one.</div></div>
+      <div class="stage" id="st2"><h2>What step two shows</h2><div class="card">Real example content for step two.</div></div>
+      <div class="stage" id="st3"><h2>What step three shows</h2><div class="card">Real example content for step three.</div></div>
+    </section>
+
+    <section id="s4" class="clip center" data-start="24" data-duration="6" data-track-index="1">
+      <div id="s4-title">Name. <span class="hl">Tagline.</span></div>
+      <div id="s4-team">Team names</div>
+    </section>
+
+    <!-- Audio: each element gets its own track index. -->
+    <audio id="music" src="assets/music.mp3" data-start="0" data-duration="30" data-track-index="10" data-volume="0.7"
+      data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0.6},{"t":1.5,"v":1},{"t":27.5,"v":1},{"t":30,"v":0}]}]}'></audio>
+    <audio id="sfx-click" src="assets/click.ogg" data-start="4.0" data-duration="0.2" data-track-index="11" data-volume="0.5"></audio>
+  </div>
+
+  <script>
+    // Typing: one span per character, revealed by display (not opacity) so the caret follows.
+    const TEXT = "What the user types";
+    const typed = document.getElementById("s1-typed");
+    for (const ch of TEXT) { const s = document.createElement("span"); s.textContent = ch; s.className = "ch"; typed.append(s); }
+
+    const tl = gsap.timeline({ paused: true });
+    const E = "power3.out";
+    const out = (sel, at) => tl.to(sel, { opacity: 0, y: -24, duration: 0.3, ease: "power2.in" }, at);
+
+    // 1. Hook (0–7): type, then click. The cursor arrives exactly at the click time.
+    const CLICK = 4.0, CURSOR = { x: 470, y: 470 };   // tune CURSOR against a snapshot at CLICK
+    tl.fromTo("#s1-cap", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: E }, 0.05);
+    tl.fromTo("#s1-card", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 0.15);
+    tl.set(".ch", { display: "none" }, 0);
+    gsap.utils.toArray(".ch").forEach((el, i) => tl.set(el, { display: "inline" }, 0.8 + i * 0.045));
+    tl.fromTo("#s1-cursor", { x: 1600, y: 1000, opacity: 0 }, { x: CURSOR.x, y: CURSOR.y, opacity: 1, duration: 0.8, ease: "power2.inOut" }, CLICK - 0.8);
+    tl.to("#s1-btn", { scale: 0.92, duration: 0.08 }, CLICK).to("#s1-btn", { scale: 1, duration: 0.18, ease: "back.out(3)" }, CLICK + 0.08);
+    tl.to("#s1-btn", { backgroundColor: "#128a59", duration: 0.15 }, CLICK + 0.08);
+    out(["#s1-cap", "#s1-card", "#s1-cursor"], 6.65);
+
+    // 2. Problem evidence (7–15): stats land one at a time, then hold.
+    tl.fromTo("#s2-cap", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: E }, 7.05);
+    tl.fromTo(".stat", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, stagger: 1.6, ease: E }, 7.8);
+    tl.fromTo("#s2-src", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 8.2);
+    out(["#s2-cap", "#s2-grid", "#s2-src"], 14.65);
+
+    // 3. How it works (15–24): rail highlights the current step; stages swap.
+    tl.fromTo(".rail-item", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, stagger: 0.06, ease: E }, 15.0);
+    tl.set(".stage", { opacity: 0 }, 15.0);
+    const steps = [["#r1", "#st1", 15.05, 18.0], ["#r2", "#st2", 18.05, 21.0], ["#r3", "#st3", 21.05, 24.0]];
+    steps.forEach(([rail, stage, at, end], i) => {
+      tl.to(rail, { color: "#ffffff", duration: 0.25 }, at);
+      tl.to(`${rail} .rail-dot`, { backgroundColor: "#0a7fc0", borderColor: "#13b5ea", scale: 1.12, duration: 0.25 }, at);
+      tl.fromTo(stage, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, at + 0.02);
+      if (i < steps.length - 1) {
+        tl.to(stage, { opacity: 0, y: -20, duration: 0.22, ease: "power2.in" }, end - 0.25);
+        tl.to(`${rail} .rail-dot`, { backgroundColor: "#128a59", borderColor: "#128a59", scale: 1, duration: 0.25 }, end);
+      }
+    });
+    out(["#s3-rail", "#st3"], 23.65);
+
+    // 4. Outro (24–30)
+    tl.fromTo("#s4-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: E }, 24.1);
+    tl.fromTo("#s4-team", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 24.6);
+
+    window.__timelines["main"] = tl;
+  </script>
+</body>
+</html>

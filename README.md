@@ -14,6 +14,7 @@ Personal and adapted skills and rules for Claude Code and Codex, managed with
 | [obsidian](skills/obsidian/SKILL.md) | Finds, creates, and edits Markdown notes across Byron's vaults while preserving frontmatter, wikilinks, and vault conventions. | “Find my project notes and update the next steps.” |
 | [polymarket](skills/polymarket/SKILL.md) | Looks up prediction markets, prices, order books, positions, orders, and balances. Places or cancels trades only when explicitly requested. | “What are the markets saying about this event?” |
 | [project-idea-validator](skills/project-idea-validator/SKILL.md) | Researches competitors and demand, challenges assumptions, and gives an evidence-backed go/no-go assessment with possible MVPs or pivots. | “Pressure-test this product idea before we build it.” |
+| [story-video](skills/story-video/SKILL.md) | Plans and builds a short story-driven video (demo, pitch, launch) as an HTML and GSAP composition rendered to MP4 with HyperFrames: storyboard, honesty rules for claims, stills checks, render, poster frame, and iterating on feedback. | “Make a 60-second demo video of what we built.” |
 | [tts](skills/tts/SKILL.md) | Converts text into spoken audio, with voice, speed, and tone controls, voice comparisons, and paragraph splitting. Uses the OpenAI audio API with credentials from Doppler. | “Read this script aloud and compare two voices.” |
 
 Some skills use Byron's personal paths and credential conventions. Read the linked
