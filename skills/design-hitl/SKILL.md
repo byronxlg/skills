@@ -81,6 +81,11 @@ does, and gets. Get a yes on the steps, then draw or build.
 - Nothing goes live until the owner has seen it and said yes in words. A juror score, a passing
   test, or silence is not a yes. "Give it a makeover" asks for a proposal, not a release.
 - Settled decisions stay settled; do not reopen them unless the owner does.
+- Once the list is set, the build is yours: check it against every decision yourself, then give
+  the owner one thing to try and one question (yes, or what feels wrong). Do not invent new
+  choices (colours, buttons, whether to put it up) to have something to ask; details inside the
+  set decisions are your call. Anything the owner raises becomes a new numbered decision on the
+  list first.
 
 ## 6. Close the pass
 
@@ -105,3 +110,6 @@ Done: 1, 3. Now: 4. Left: 5-9.
 - A design shipped live on a juror's win without the owner seeing it (ShoreWash, undone within
   the hour).
 - Pictures sent for a UX decision that needed to be tried.
+- After all decisions were set, a build sent as a picture with three things to review, then cut
+  into three new choices that were never on the list (prompt-to-table, 2026-11-09: "lost all
+  sense of process and are now just clutching").
