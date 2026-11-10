@@ -57,6 +57,9 @@ does, and gets. Get a yes on the steps, then draw or build.
 - Reference products the owner names ("make it feel like X") are the brief: study what makes
   X work, say it in one line, and show how each option meets it.
 - Reply in the thread the owner is answering; picture and question in the same message.
+- When an answer is in and the next decision is already on the agreed list, build it and send
+  it in the same reply or right after. Do not end with "say go and I will send the next one":
+  the list was the go.
 
 ## 4. Pictures for the big decisions, something to try for UX
 
@@ -113,3 +116,6 @@ Done: 1, 3. Now: 4. Left: 5-9.
 - After all decisions were set, a build sent as a picture with three things to review, then cut
   into three new choices that were never on the list (prompt-to-table, 2026-11-09: "lost all
   sense of process and are now just clutching").
+- Ending each answer with "say go and I will send the next one" when the next decision was
+  already on the agreed list (prompt-to-table, 2026-11-10: "Stop asking me to say go just send
+  it").
