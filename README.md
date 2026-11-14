@@ -35,6 +35,7 @@ Rules are always-on instructions, installed by Skillfold 2.6.0+ according to the
 | [kubectl-context](rules/kubectl-context.md) | Requires explicit Kubernetes and Helm contexts. | Claude and Codex |
 | [tool-preferences](rules/tool-preferences.md) | Sets preferred command-line search and data-processing tools. | Claude and Codex |
 | [project-notes](rules/project-notes.md) | Reads the Obsidian project note for the current repo before substantive work, if one exists. | Claude and Codex |
+| [build-on-primitives](rules/build-on-primitives.md) | When building apps, picks between a high-level library and a thin owned layer on primitives by how custom the requirement is. | Claude and Codex |
 | [codex-compatibility](rules/codex-compatibility.md) | Adapts Claude skill examples and repository instructions for Codex. | Codex only |
 | [doppler-secrets](rules/hosts/Byrons-Mac-mini/doppler-secrets.md) | Defines Doppler projects, credential scoping, and on-demand access. | Byrons-Mac-mini only |
 | [telegram](rules/hosts/Byrons-Mac-mini/telegram.md) | Documents the personal Telegram notification channel. | Byrons-Mac-mini only |
