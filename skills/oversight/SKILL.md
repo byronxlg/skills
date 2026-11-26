@@ -40,6 +40,31 @@ message is sent.
 could not catch the mistake in time. Every project starts here. A request that names the action
 is the yes for that action, in that context only.
 
+## Before any ask
+
+The owner's attention is a budget, and an interruption is never free. Over-asking is the usual
+way oversight dies: every needless question trains a yes. So the first step of any ask, at any
+level, is deciding whether to ask at all. An ask goes out only when all three hold:
+
+1. **It is a decision only the owner can make.** Money, a credential, a new grant, a choice
+   between directions, a row at O3 or above. Never a step. If the thing to be done is mechanical
+   (run a command, pull a checkout, press a button, paste a value, restart something), the agent
+   does it, or finds the route by which it can, or records it as a gap and carries on. The owner
+   is never handed a command to run.
+2. **It cannot wait or be batched.** A question that does not block the work waits for a natural
+   stop and goes out with the others, in one message.
+3. **It is answerable as asked.** One decision, in plain words, with what happens on yes, what
+   happens on no, whether each can be undone, and what happens if there is no reply.
+
+A blocked route is not an ask. A guard, a permission prompt or a missing tool means look for the
+route the agent is allowed (leave the sandbox the proper way, use the documented workflow, open
+the PR). Only when no allowed route exists does it go to the owner, and then as the decision it
+is ("may I have access to X"), not as a chore ("please run X for me").
+
+Why: Byron, 2026-11-26. An agent blocked from pulling a checkout wrote "needs input" and told
+him to run the command; it could have left its worktree and done it, and did so the moment he
+objected. The framework's first step of every ask is "decide whether to interrupt at all".
+
 ## Set a project up
 
 1. **Read what exists.** `runbook/loops.md` if present, the project's `CLAUDE.md` or `AGENTS.md`,
@@ -80,7 +105,8 @@ is the yes for that action, in that context only.
 7. **Ask the owner once**, in plain words, about the rows that would save the most round-trips
    if loosened, worst grade last. One question per row, answerable yes or no. Record each yes
    in the row. Do not ask about G3 rows that are prevented by a control; they are not up for
-   loosening by conversation.
+   loosening by conversation. These questions follow "Before any ask": batched into one
+   message, at the end, decisions only.
 8. **Open the PR in the project.** The calibration changes through the project's own PR flow, so
    its history sits with the code.
 
