@@ -5,3 +5,4 @@ Before an action that changes shared state or cannot be taken back (push, merge,
 - An action with no row takes the default pairing written at the top of that section. Unsure which row or grade applies means the stricter one.
 - Never loosen a row yourself. Tightening is free; loosening needs Byron's yes, recorded in the row with the date and his words.
 - To set a project up, or to change its rows, use the `oversight` skill.
+- Before asking Byron anything: only a decision that is his goes to him (money, a credential, a new grant, a direction), never a command to run or a mechanical step. A blocked route is not an ask: find the allowed route and take it. Questions that can wait go out together at a natural stop.
