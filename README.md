@@ -13,6 +13,7 @@ Personal and adapted skills and rules for Claude Code and Codex, managed with
 | [find-skills](skills/find-skills/SKILL.md) | Searches GitHub and the web for existing skills, compares candidates, and installs selected skills with Skillfold. | “Find a skill for managing GitHub releases.” |
 | [issue](skills/issue/SKILL.md) | Turns a request into a GitHub issue with background, requirements, and acceptance criteria. Shows the draft before creating it. | “Create an issue for adding CSV exports.” |
 | [obsidian](skills/obsidian/SKILL.md) | Finds, creates, and edits Markdown notes across Byron's vaults while preserving frontmatter, wikilinks, and vault conventions. | “Find my project notes and update the next steps.” |
+| [oversight](skills/oversight/SKILL.md) | Sets up or adjusts a project's oversight calibration: grades each action an agent can take there, starts every row at the default pairing, and records departures in the project's runbook. After LoopRails. | "Calibrate oversight for this project." |
 | [polymarket](skills/polymarket/SKILL.md) | Looks up prediction markets, prices, order books, positions, orders, and balances. Places or cancels trades only when explicitly requested. | “What are the markets saying about this event?” |
 | [project-idea-validator](skills/project-idea-validator/SKILL.md) | Researches competitors and demand, challenges assumptions, and gives an evidence-backed go/no-go assessment with possible MVPs or pivots. | “Pressure-test this product idea before we build it.” |
 | [story-video](skills/story-video/SKILL.md) | Plans and builds a short story-driven video (demo, pitch, launch) as an HTML and GSAP composition rendered to MP4 with HyperFrames: storyboard, honesty rules for claims, stills checks, render, poster frame, and iterating on feedback. | “Make a 60-second demo video of what we built.” |
@@ -36,6 +37,7 @@ Rules are always-on instructions, installed by Skillfold 2.6.0+ according to the
 | [tool-preferences](rules/tool-preferences.md) | Sets preferred command-line search and data-processing tools. | Claude and Codex |
 | [project-notes](rules/project-notes.md) | Reads the Obsidian project note for the current repo before substantive work, if one exists. | Claude and Codex |
 | [build-on-primitives](rules/build-on-primitives.md) | When building apps, picks between a high-level library and a thin owned layer on primitives by how custom the requirement is. | Claude and Codex |
+| [oversight](rules/oversight.md) | Before a shared-state or irreversible action, reads the "Calibration" section of the repo's `runbook/loops.md`, if it exists, and acts at the level its row gives. | Claude and Codex |
 | [codex-compatibility](rules/codex-compatibility.md) | Adapts Claude skill examples and repository instructions for Codex. | Codex only |
 | [doppler-secrets](rules/hosts/Byrons-Mac-mini/doppler-secrets.md) | Defines Doppler projects, credential scoping, and on-demand access. | Byrons-Mac-mini only |
 | [telegram](rules/hosts/Byrons-Mac-mini/telegram.md) | Documents the personal Telegram notification channel. | Byrons-Mac-mini only |
